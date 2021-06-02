@@ -1,4 +1,10 @@
-import {Document, Html, DocumentHead, Main, BlitzScript /*DocumentContext*/} from 'blitz'
+import {
+  Document,
+  Html,
+  DocumentHead,
+  Main,
+  BlitzScript /*DocumentContext*/,
+} from 'blitz';
 
 class MyDocument extends Document {
   // Only uncomment if you need to customize this behaviour
@@ -16,8 +22,8 @@ class MyDocument extends Document {
           <BlitzScript />
         </body>
       </Html>
-    )
+    );
   }
 }
 
-export default MyDocument
+export default MyDocument;

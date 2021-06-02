@@ -1,9 +1,9 @@
-import React, { Suspense } from "react"
-import { Link, BlitzPage, useMutation, Routes } from "blitz"
-import Layout from "app/core/layouts/Layout"
-import { useCurrentUser } from "app/core/hooks/useCurrentUser"
-import logout from "app/auth/mutations/logout"
-import { CharacterForm } from "app/core/components/CharacterForm"
+import React, { Suspense } from 'react';
+import { Link, BlitzPage, useMutation, Routes } from 'blitz';
+import Layout from 'app/core/layouts/Layout';
+import { useCurrentUser } from 'app/core/hooks/useCurrentUser';
+import logout from 'app/auth/mutations/logout';
+import { CharacterForm } from 'app/core/components/CharacterForm';
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -11,8 +11,8 @@ import { CharacterForm } from "app/core/components/CharacterForm"
  */
 
 const UserInfo = () => {
-  const currentUser = useCurrentUser()
-  const [logoutMutation] = useMutation(logout)
+  const currentUser = useCurrentUser();
+  const [logoutMutation] = useMutation(logout);
 
   if (currentUser) {
     return (
@@ -20,7 +20,7 @@ const UserInfo = () => {
         <button
           className="button small"
           onClick={async () => {
-            await logoutMutation()
+            await logoutMutation();
           }}
         >
           Logout
@@ -31,7 +31,7 @@ const UserInfo = () => {
           User role: <code>{currentUser.role}</code>
         </div>
       </>
-    )
+    );
   } else {
     return (
       <>
@@ -46,9 +46,9 @@ const UserInfo = () => {
           </a>
         </Link>
       </>
-    )
+    );
   }
-}
+};
 
 const Home: BlitzPage = () => {
   return (
@@ -59,10 +59,10 @@ const Home: BlitzPage = () => {
 
       <footer></footer>
     </div>
-  )
-}
+  );
+};
 
-Home.suppressFirstRenderFlicker = true
-Home.getLayout = (page) => <Layout title="Home">{page}</Layout>
+Home.suppressFirstRenderFlicker = true;
+Home.getLayout = (page) => <Layout title="Home">{page}</Layout>;
 
-export default Home
+export default Home;

@@ -1,9 +1,9 @@
-import { BlitzConfig, sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
+import { BlitzConfig, sessionMiddleware, simpleRolesIsAuthorized } from 'blitz';
 
 const config: BlitzConfig = {
   middleware: [
     sessionMiddleware({
-      cookiePrefix: "cyberpunk-character-builder",
+      cookiePrefix: 'cyberpunk-character-builder',
       isAuthorized: simpleRolesIsAuthorized,
     }),
   ],
@@ -15,5 +15,5 @@ const config: BlitzConfig = {
     return config
   },
   */
-}
-module.exports = config
+};
+module.exports = config;
