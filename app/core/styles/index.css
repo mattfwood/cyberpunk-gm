@@ -6,6 +6,28 @@
   .hero {
     @apply w-full text-[#333];
   }
+
+  .cut-edges {
+    clip-path: polygon(
+      0 0,
+      1.25rem 0,
+      calc(100% - 1.25rem) 0,
+      100% 1.25rem,
+      100% 100%,
+      calc(100% - 1.25rem) 100%,
+      1.25rem 100%,
+      0 calc(100% - 1.25rem)
+    );
+  }
+}
+
+.dark-red {
+  background-color: #ad3126;
+}
+
+.sheet-box {
+  @apply p-5 text-white font-semibold cut-edges;
+  background-color: #db4435;
 }
 
 .title {
