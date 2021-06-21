@@ -1,6 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { DiceRoll } from 'rpg-dice-roller';
 import { RadioGroup } from '@headlessui/react';
+import { roles } from './roles';
+import { useCharacterState } from '../atoms/roleAtom';
+import { StatGenerator } from './StatGenerator';
+import { SkillBuilder } from './SkillBuilder';
 
 function LifepathSection() {
   const [selected, setSelected] = useState<number | undefined>(undefined);
@@ -74,6 +78,32 @@ function LifepathSection() {
   );
 }
 
+const RoleSelector = () => {
+  const [character, setCharacter] = useCharacterState();
+
+  return (
+    <div>
+      <select
+        className="select-input px-4 py-2 cut-edges text-black"
+        value={character.role}
+        onChange={(e) =>
+          setCharacter((prev) => ({
+            ...prev,
+            role: e.target.value as keyof typeof roles,
+            skills: roles[e.target.value].skills,
+          }))
+        }
+      >
+        {Object.keys(roles).map((role) => (
+          <option key={role} value={role} className="capitalize">
+            {role}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
 /**
  * 1. Pick a role
  *   a. Set role ability to 4
@@ -88,24 +118,14 @@ function LifepathSection() {
 const steps = [
   {
     title: 'Pick Role',
+    component: <RoleSelector />,
+  },
+  {
+    title: 'Skills',
     component: (
-      <div>
-        <select className="select-input">
-          <option>None</option>
-          <option>Rockerboy</option>
-          <option>Solo</option>
-          <option>Netrunner</option>
-          <option>Tech</option>
-          <option>Media</option>
-          <option>Lawman</option>
-          <option>Exec</option>
-          <option>Fixer</option>
-          <option>Nomad</option>
-          <option>Street Scum</option>
-          <option>Booster</option>
-          <option>Private Security</option>
-        </select>
-      </div>
+      <section>
+        <SkillBuilder />
+      </section>
     ),
   },
   {
@@ -116,6 +136,22 @@ const steps = [
       </div>
     ),
   },
+  {
+    title: 'Roll STATs',
+    component: (
+      <section>
+        <StatGenerator />
+      </section>
+    ),
+  },
+  // {
+  //   title: 'Skills',
+  //   component: (
+  //     <section>
+  //       <SkillBuilder />
+  //     </section>
+  //   ),
+  // },
 ];
 
 const personalities = [

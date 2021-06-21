@@ -11,5 +11,6 @@ module.exports = {
         semi: true,
       },
     ],
+    'jsx-a11y/no-onchange': 0,
   },
 };

@@ -12,6 +12,7 @@ import LoginForm from 'app/auth/components/LoginForm';
 import { Suspense } from 'react';
 
 import 'app/core/styles/index.css';
+import { RecoilRoot } from 'recoil';
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page);
@@ -24,7 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
         resetKeys={[router.asPath]}
         onReset={useQueryErrorResetBoundary().reset}
       >
-        {getLayout(<Component {...pageProps} />)}
+        <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>
       </ErrorBoundary>
     </Suspense>
   );
