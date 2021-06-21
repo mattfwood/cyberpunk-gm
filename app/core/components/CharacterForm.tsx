@@ -5,6 +5,7 @@ import { roles } from './roles';
 import { useCharacterState } from '../atoms/roleAtom';
 import { StatGenerator } from './StatGenerator';
 import { SkillBuilder } from './SkillBuilder';
+import { DerivedStats } from './DerivedStats';
 
 function LifepathSection() {
   const [selected, setSelected] = useState<number | undefined>(undefined);
@@ -121,14 +122,6 @@ const steps = [
     component: <RoleSelector />,
   },
   {
-    title: 'Skills',
-    component: (
-      <section>
-        <SkillBuilder />
-      </section>
-    ),
-  },
-  {
     title: 'Run Lifepath',
     component: (
       <div>
@@ -144,14 +137,22 @@ const steps = [
       </section>
     ),
   },
-  // {
-  //   title: 'Skills',
-  //   component: (
-  //     <section>
-  //       <SkillBuilder />
-  //     </section>
-  //   ),
-  // },
+  {
+    title: 'Derived STATs',
+    component: (
+      <section>
+        <DerivedStats />
+      </section>
+    ),
+  },
+  {
+    title: 'Skills',
+    component: (
+      <section>
+        <SkillBuilder />
+      </section>
+    ),
+  },
 ];
 
 const personalities = [

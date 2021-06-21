@@ -13,9 +13,11 @@ export function SkillBuilder() {
 
   function calculateSkillpoints() {
     const TOTAL_POINTS = 86;
-    const allocatedSkillpoints = Object.values(character.skills!).reduce(
-      (total, value) => {
-        return total + value;
+    const allocatedSkillpoints = Object.entries(character.skills!).reduce(
+      (total, [name, value]) => {
+        // complex skills with x2 in name cost twice as much
+        const cost = name.includes('x2') ? value * 2 : value;
+        return total + cost;
       },
       0
     );
