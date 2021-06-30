@@ -16,7 +16,9 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <DocumentHead />
+        <DocumentHead>
+          <link href="/fonts.css" rel="stylesheet" />
+        </DocumentHead>
         <body>
           <Main />
           <BlitzScript />

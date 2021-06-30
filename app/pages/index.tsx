@@ -1,68 +1,46 @@
-import React, { Suspense } from 'react';
-import { Link, BlitzPage, useMutation, Routes } from 'blitz';
+import React from 'react';
 import Layout from 'app/core/layouts/Layout';
-import { useCurrentUser } from 'app/core/hooks/useCurrentUser';
-import logout from 'app/auth/mutations/logout';
-import { CharacterForm } from 'app/core/components/CharacterForm';
+import type { BlitzPage } from 'blitz';
 
-/*
- * This file is just for a pleasant getting started page for your new app.
- * You can delete everything in here and start from scratch if you like.
- */
-
-const UserInfo = () => {
-  const currentUser = useCurrentUser();
-  const [logoutMutation] = useMutation(logout);
-
-  if (currentUser) {
-    return (
-      <>
-        <button
-          className="button small"
-          onClick={async () => {
-            await logoutMutation();
-          }}
-        >
-          Logout
-        </button>
-        <div>
-          User id: <code>{currentUser.id}</code>
-          <br />
-          User role: <code>{currentUser.role}</code>
-        </div>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Link href={Routes.SignupPage()}>
-          <a className="button small">
-            <strong>Sign Up</strong>
-          </a>
-        </Link>
-        <Link href={Routes.LoginPage()}>
-          <a className="button small">
-            <strong>Login</strong>
-          </a>
-        </Link>
-      </>
-    );
-  }
+type CharacterCardProps = {
+  name: string;
+  currentHealth: number;
+  maxHealth: number;
+  initiative?: 0;
 };
 
-const Home: BlitzPage = () => {
+const CharacterCard = ({
+  name,
+  currentHealth,
+  maxHealth,
+  initiative,
+}: CharacterCardProps) => {
   return (
-    <div>
-      <main className="max-w-3xl p-4 mx-auto">
-        <CharacterForm />
-      </main>
-
-      <footer></footer>
+    <div className="border-2 border-primary divide-y divide-primary">
+      <h3 className="text-xl font-bold  p-3">{name}</h3>
+      <div className="flex divide-x divide-primary">
+        <div className="p-3">
+          {currentHealth} / {maxHealth} HP
+        </div>
+        <div className="p-3">Initiative: {initiative}</div>
+      </div>
     </div>
   );
 };
 
-Home.suppressFirstRenderFlicker = true;
-Home.getLayout = (page) => <Layout title="Home">{page}</Layout>;
+const character = {
+  name: 'Johnny Hellmouth',
+  currentHealth: 10,
+  maxHealth: 20,
+  initiative: 5,
+};
 
-export default Home;
+const HomePage: BlitzPage = () => {
+  return (
+    <Layout>
+      <CharacterCard {...character} />
+    </Layout>
+  );
+};
+
+export default HomePage;

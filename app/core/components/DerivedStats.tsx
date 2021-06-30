@@ -17,14 +17,16 @@ export function DerivedStats() {
 
   const hitpoints = calcHP(stats);
 
+  if (!stats) return null;
+
   const derivedStats = {
     hitpoints,
     // Seriously Wounded Wound Threshold is half of total HP (rounded up).
     'seriously wounded': Math.round(hitpoints / 2),
     // Death Save is equal to BODY Statistic
-    'death save': stats.body,
+    'death save': stats?.body,
     // Humanity is empathy times 10
-    humanity: parseInt(stats.emp!) * 10,
+    humanity: parseInt(stats?.emp!) * 10,
   };
 
   return (

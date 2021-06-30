@@ -12,6 +12,7 @@ import LoginForm from 'app/auth/components/LoginForm';
 import { Suspense } from 'react';
 
 import 'app/core/styles/index.css';
+// import 'app/core/styles/fonts.css';
 import { RecoilRoot } from 'recoil';
 
 export default function App({ Component, pageProps }: AppProps) {
