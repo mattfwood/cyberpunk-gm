@@ -3,8 +3,10 @@ import produce from 'immer';
 import Layout from 'app/core/layouts/Layout';
 import type { BlitzPage } from 'blitz';
 import { XIcon } from '@heroicons/react/outline';
+import useLocalStorage from 'app/core/hooks/useLocalStorage';
 
 type Character = {
+  id: number;
   name: string;
   currentHealth: number;
   maxHealth: number;
@@ -14,7 +16,7 @@ type Character = {
 
 type CharacterCardProps = Character & {
   setCharacters: React.Dispatch<React.SetStateAction<Character[]>>;
-  index: number;
+  characters: Character[];
 };
 
 const Label = ({ children }) => (
@@ -22,18 +24,21 @@ const Label = ({ children }) => (
 );
 
 const CharacterCard = ({
+  id,
   name,
   currentHealth,
   maxHealth,
   initiative,
   setCharacters,
-  index,
-}: // turnComplete,
+  characters,
+}: // index,
+// turnComplete,
 CharacterCardProps) => {
   const [turnComplete, setTurnComplete] = useState(false);
   function handleChange(e) {
     setCharacters((prev) => {
       const result = produce(prev, (draft) => {
+        const index = draft.findIndex((character) => character.id === id);
         let value: string | number | boolean = e.target.value;
 
         if (e.target.type === 'number') {
@@ -58,6 +63,7 @@ CharacterCardProps) => {
     if (confirm) {
       setCharacters((prev) => {
         const result = produce(prev, (draft) => {
+          const index = draft.findIndex((character) => character.id === id);
           draft.splice(index, 1);
         });
 
@@ -129,26 +135,30 @@ CharacterCardProps) => {
   );
 };
 
-const samplePlayer = {
-  name: 'Johnny Hellmouth',
-  currentHealth: 10,
-  maxHealth: 20,
-  initiative: 5,
-  turnComplete: false,
-};
+// const samplePlayer = {
+//   name: 'Johnny Hellmouth',
+//   currentHealth: 10,
+//   maxHealth: 20,
+//   initiative: 5,
+//   turnComplete: false,
+// };
 
-const initialCharacters = [
-  { ...samplePlayer, name: 'Guy 1', initiative: 10 },
-  { ...samplePlayer, name: 'guy 2', initiative: 10 },
-  { ...samplePlayer, name: 'guy 3', initiative: 15 },
-];
+// const initialCharacters = [
+//   { ...samplePlayer, name: 'Guy 1', initiative: 10 },
+//   { ...samplePlayer, name: 'guy 2', initiative: 10 },
+//   { ...samplePlayer, name: 'guy 3', initiative: 15 },
+// ];
 
 const HomePage: BlitzPage = () => {
-  const [characters, setCharacters] = useState<Character[]>(initialCharacters);
+  const [characters, setCharacters] = useLocalStorage<Character[]>(
+    'combatTracking',
+    []
+  );
   const [roundTimestamp, setRoundTimestamp] = useState(Date.now());
 
   function addCharacter() {
     const newCharacter = {
+      id: Date.now(),
       name: '',
       currentHealth: 0,
       maxHealth: 0,
@@ -169,13 +179,13 @@ const HomePage: BlitzPage = () => {
   return (
     <Layout>
       <div className="space-y-4" key={roundTimestamp}>
-        {sortedCharacters.map((character, index) => (
+        {sortedCharacters.map((character) => (
           <CharacterCard
-            key={index}
+            key={character.id}
             {...character}
             name={`${character.name}`}
-            index={index}
             setCharacters={setCharacters}
+            characters={sortedCharacters}
           />
         ))}
       </div>
