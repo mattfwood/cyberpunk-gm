@@ -85,10 +85,10 @@ CharacterCardProps) => {
       >
         <XIcon />
       </button>
-      <div className="flex items-center pl-2">
+      <div className="flex items-center">
         <input
           type="checkbox"
-          className="bg-primary focus:ring-0 text-primary border-none outline-none focus:outline-none focus:bg-primary-focus checked:bg-primary-focus hover:bg-primary-focus active:bg-primary-focus"
+          className="mx-2 bg-primary focus:ring-0 text-primary border-none outline-none focus:outline-none focus:bg-primary-focus checked:bg-primary-focus hover:bg-primary-focus active:bg-primary-focus"
           name="turnComplete"
           onChange={(e) => setTurnComplete(e.target.checked)}
           checked={turnComplete}
