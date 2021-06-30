@@ -4,27 +4,24 @@ import { Head, useRouter } from 'blitz';
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import {
-  CalendarIcon,
+  AdjustmentsIcon,
   ChartBarIcon,
-  FolderIcon,
   HomeIcon,
-  InboxIcon,
   MenuIcon,
-  UsersIcon,
   XIcon,
 } from '@heroicons/react/outline';
 
 const baseNavigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon },
+  { name: 'Combat Tracker', href: '/', icon: AdjustmentsIcon },
   // { name: 'Team', href: '#', icon: UsersIcon, current: false },
   // { name: 'Projects', href: '#', icon: FolderIcon, current: false },
   // { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
   // { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  {
-    name: 'Character Creation',
-    href: '/character-creation',
-    icon: ChartBarIcon,
-  },
+  // {
+  //   name: 'Character Creation',
+  //   href: '/character-creation',
+  //   icon: ChartBarIcon,
+  // },
 ];
 
 function classNames(...classes) {
@@ -74,7 +71,7 @@ const Layout = ({ title, children }: LayoutProps) => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative flex-1 flex flex-col max-w-xs w-full bg-gray-800">
+            <div className="relative flex-1 flex flex-col max-w-xs w-full bg-sidebar">
               <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-300"
@@ -109,7 +106,7 @@ const Layout = ({ title, children }: LayoutProps) => {
                       href={item.href}
                       className={classNames(
                         item.current
-                          ? 'bg-gray-900 text-white'
+                          ? 'bg-primary-low text-white'
                           : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                         'group flex items-center px-2 py-2 text-base font-medium rounded-md'
                       )}
@@ -161,7 +158,7 @@ const Layout = ({ title, children }: LayoutProps) => {
       <div className="hidden md:flex md:flex-shrink-0">
         <div className="flex flex-col w-64">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex flex-col h-0 flex-1 bg-gray-800">
+          <div className="flex flex-col h-0 flex-1 bg-sidebar">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <div className="flex items-center flex-shrink-0 px-4 text-white text-xl font-bold">
                 {/* <img
@@ -171,14 +168,14 @@ const Layout = ({ title, children }: LayoutProps) => {
                 /> */}
                 Cyberpunk Red GM Tool
               </div>
-              <nav className="mt-5 flex-1 px-2 bg-gray-800 space-y-1">
+              <nav className="mt-5 flex-1 px-2 bg-sidebar space-y-1">
                 {navigation.map((item) => (
                   <a
                     key={item.name}
                     href={item.href}
                     className={classNames(
                       item.current
-                        ? 'bg-gray-900 text-white'
+                        ? 'bg-primary-low text-white'
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                       'group flex items-center px-2 py-2 text-md font-medium rounded-md'
                     )}
@@ -254,19 +251,6 @@ const Layout = ({ title, children }: LayoutProps) => {
 type LayoutProps = {
   title?: string;
   children: ReactNode;
-};
-
-const LayoutOld = ({ title, children }: LayoutProps) => {
-  return (
-    <>
-      <Head>
-        <title>{title || 'cyberpunk-character-builder'}</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      {children}
-    </>
-  );
 };
 
 export default Layout;

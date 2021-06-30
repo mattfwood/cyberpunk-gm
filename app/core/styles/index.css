@@ -24,6 +24,14 @@
     @apply bg-primary border-black px-1 py-0 text-black focus:border-primary-focus focus:ring-primary-focus;
   }
 
+  input.clear-input {
+    @apply bg-transparent text-white p-2 border-none cursor-pointer w-full focus:border-none;
+  }
+
+  .cyber-button {
+    @apply bg-primary hover:bg-primary-focus capitalize py-1 px-4 text-black;
+  }
+
   /* input:focus {
     @apply border-primary-focus bg-primary-highlight
   } */
