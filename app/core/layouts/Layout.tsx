@@ -40,7 +40,7 @@ const Layout = ({ title, children }: LayoutProps) => {
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
       <Head>
-        <title>{title || 'cyberpunk-character-builder'}</title>
+        <title>{title || 'Cyberpunk GM Tool'}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Transition.Root show={sidebarOpen} as={Fragment}>
