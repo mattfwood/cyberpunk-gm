@@ -19,6 +19,14 @@
       0 calc(100% - 1.25rem)
     );
   }
+
+  input[type="text"], input[type="number"] {
+    @apply bg-primary border-black px-1 py-0 text-black focus:border-primary-focus focus:ring-primary-focus;
+  }
+
+  /* input:focus {
+    @apply border-primary-focus bg-primary-highlight
+  } */
 }
 
 .dark-red {

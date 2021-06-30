@@ -13,6 +13,8 @@ module.exports = {
       colors: {
         primary: {
           DEFAULT: '#ff375c',
+          focus: '#fd2133',
+          highlight: 'rgba(253,33,51,.5)',
         },
         background: '#161616',
       },
@@ -21,5 +23,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 };
