@@ -6,7 +6,7 @@ type CharacterCardProps = {
   name: string;
   currentHealth: number;
   maxHealth: number;
-  initiative?: 0;
+  initiative?: number;
 };
 
 const CharacterCard = ({
