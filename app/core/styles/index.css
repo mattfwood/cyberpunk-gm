@@ -28,6 +28,10 @@
     @apply bg-transparent text-white p-2 border-none cursor-pointer w-full focus:border-none;
   }
 
+  select {
+    @apply block w-full pl-3 pr-10 focus:outline-none focus:ring-primary focus:border-primary rounded-sm;
+  }
+
   .cyber-button {
     @apply bg-primary hover:bg-primary-focus capitalize py-1 px-4 text-black;
   }

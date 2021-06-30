@@ -2,16 +2,44 @@ import React, { useState } from 'react';
 import produce from 'immer';
 import Layout from 'app/core/layouts/Layout';
 import type { BlitzPage } from 'blitz';
-import { XIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon, XIcon } from '@heroicons/react/outline';
 import useLocalStorage from 'app/core/hooks/useLocalStorage';
+import { Disclosure } from '@headlessui/react';
+import { GenerateNPC } from 'app/core/components/GenerateNPC';
 
-type Character = {
+export type Stats = {
+  int: number;
+  ref: number;
+  dex: number;
+  tech: number;
+  cool: number;
+  will: number;
+  luck: number;
+  move: number;
+  body: number;
+  emp: number;
+};
+
+export type Weapon = {
+  name: string;
+  damage: string;
+};
+
+export type Armor = {
+  head: number;
+  body: number;
+};
+
+export type Character = {
   id: number;
   name: string;
   currentHealth: number;
   maxHealth: number;
   initiative: number;
   turnComplete: boolean;
+  stats?: Stats;
+  weapons?: Weapon[] | null;
+  armor?: Armor;
 };
 
 type CharacterCardProps = Character & {
@@ -73,65 +101,83 @@ CharacterCardProps) => {
   }
 
   return (
-    <div
-      className={`border-2 border-primary divide-y divide-primary relative ${
-        turnComplete ? 'opacity-50' : 'opacity-100'
-      }`}
-    >
-      <button
-        tabIndex={-1}
-        onClick={handleDelete}
-        className="bg-primary hover:bg-primary-focus text-black hover:text-white w-5 h-5 absolute right-0 top-0"
+    <>
+      <div
+        className={`border-2 border-primary divide-y divide-primary relative ${
+          turnComplete ? 'opacity-50' : 'opacity-100'
+        }`}
       >
-        <XIcon />
-      </button>
-      <div className="flex items-center">
-        <input
-          type="checkbox"
-          className="mx-2 bg-primary focus:ring-0 text-primary border-none outline-none focus:outline-none focus:bg-primary-focus checked:bg-primary-focus hover:bg-primary-focus active:bg-primary-focus"
-          name="turnComplete"
-          onChange={(e) => setTurnComplete(e.target.checked)}
-          checked={turnComplete}
-        />
-        <input
-          value={name}
-          type="text"
-          name="name"
-          className="clear-input text-white text-xl font-bold"
-          onChange={handleChange}
-        />
-      </div>
-      <div className="flex divide-x divide-primary">
-        <div className="p-3">
-          <Label>Initiative</Label>
+        <button
+          tabIndex={-1}
+          onClick={handleDelete}
+          className="bg-primary hover:bg-primary-focus text-black hover:text-white w-5 h-5 absolute right-0 top-0"
+        >
+          <XIcon />
+        </button>
+        <div className="flex items-center">
           <input
-            onChange={handleChange}
-            type="number"
-            name="initiative"
-            className="w-14"
-            value={initiative}
+            type="checkbox"
+            className="mx-2 bg-primary focus:ring-0 text-primary border-none outline-none focus:outline-none focus:bg-primary-focus checked:bg-primary-focus hover:bg-primary-focus active:bg-primary-focus"
+            name="turnComplete"
+            onChange={(e) => setTurnComplete(e.target.checked)}
+            checked={turnComplete}
           />
-        </div>
-        <div className="p-3">
-          <Label>HP</Label>
           <input
-            type="number"
-            name="currentHealth"
-            className="w-14"
-            value={currentHealth}
-            onChange={handleChange}
-          />
-          <span> / </span>
-          <input
-            type="number"
-            name="maxHealth"
-            className="w-14"
-            value={maxHealth}
+            value={name}
+            type="text"
+            name="name"
+            className="clear-input text-white text-xl font-bold"
             onChange={handleChange}
           />
         </div>
+        <div className="flex divide-x divide-primary">
+          <div className="p-3">
+            <Label>Initiative</Label>
+            <input
+              onChange={handleChange}
+              type="number"
+              name="initiative"
+              className="w-14"
+              value={initiative}
+            />
+          </div>
+          <div className="p-3">
+            <Label>HP</Label>
+            <input
+              type="number"
+              name="currentHealth"
+              className="w-14"
+              value={currentHealth}
+              onChange={handleChange}
+            />
+            <span> / </span>
+            <input
+              type="number"
+              name="maxHealth"
+              className="w-14"
+              value={maxHealth}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+        <Disclosure>
+          {({ open }) => (
+            <>
+              <Disclosure.Button className="flex justify-center bg-primary w-full">
+                <ChevronDownIcon
+                  className={`text-xs w-5 text-black transform ${
+                    open ? 'rotate-180' : ''
+                  }`}
+                />
+              </Disclosure.Button>
+              <Disclosure.Panel>
+                <div className="p-4">Content</div>
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -156,15 +202,16 @@ const HomePage: BlitzPage = () => {
   );
   const [roundTimestamp, setRoundTimestamp] = useState(Date.now());
 
-  function addCharacter() {
-    const newCharacter = {
+  function addCharacter(
+    newCharacter = {
       id: Date.now(),
       name: '',
       currentHealth: 0,
       maxHealth: 0,
       initiative: 0,
       turnComplete: false,
-    };
+    }
+  ) {
     setCharacters((prev) => [...prev, newCharacter]);
   }
 
@@ -190,12 +237,13 @@ const HomePage: BlitzPage = () => {
         ))}
       </div>
       <div className="mt-4 space-x-2 flex">
-        <button className="cyber-button" onClick={addCharacter}>
+        <button className="cyber-button" onClick={() => addCharacter()}>
           Add Character
         </button>
         <button className="cyber-button" onClick={startNewRound}>
           New Round
         </button>
+        <GenerateNPC />
       </div>
     </Layout>
   );
