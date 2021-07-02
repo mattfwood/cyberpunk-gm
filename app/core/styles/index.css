@@ -21,7 +21,7 @@
   }
 
   input[type="text"], input[type="number"] {
-    @apply bg-primary border-black px-1 py-0 text-black focus:border-primary-focus focus:ring-primary-focus;
+    @apply border-black px-1 py-0 text-black focus:border-primary-focus focus:ring-primary-focus;
   }
 
   input.clear-input {

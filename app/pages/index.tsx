@@ -37,9 +37,9 @@ export type Character = {
   maxHealth: number;
   initiative: number;
   turnComplete: boolean;
-  stats?: Stats;
-  weapons?: Weapon[] | null;
-  armor?: Armor;
+  stats: Stats;
+  weapons: Weapon[] | null;
+  armor: Armor;
 };
 
 type CharacterCardProps = Character & {
@@ -64,11 +64,15 @@ const CharacterCard = ({
 // turnComplete,
 CharacterCardProps) => {
   const [turnComplete, setTurnComplete] = useState(false);
+  const [damageValue, setDamageValue] = useState(0);
+
   function handleChange(e) {
     setCharacters((prev) => {
       const result = produce(prev, (draft) => {
         const index = draft.findIndex((character) => character.id === id);
+        const currentCharacter = draft[index]!;
         let value: string | number | boolean = e.target.value;
+
         const fieldName = e.target.name;
 
         if (e.target.type === 'number') {
@@ -79,11 +83,42 @@ CharacterCardProps) => {
 
         if (fieldName.includes('armor')) {
           const armorType = fieldName.split('.')[1];
-          // @ts-ignore
-          draft[index].armor[armorType] = value;
+          currentCharacter.armor[armorType] = value;
         } else {
-          // @ts-ignore
-          draft[index][e.target.name] = value;
+          currentCharacter[e.target.name] = value;
+        }
+      });
+
+      return result;
+    });
+  }
+
+  function handleDamage(type: 'head' | 'body', distance: 'ranged' | 'melee') {
+    setCharacters((prev) => {
+      const result = produce<Character[]>(prev, (draft) => {
+        const index = draft.findIndex((character) => character.id === id);
+        const currentCharacter = draft[index]!;
+
+        if (index !== -1) {
+          let armorValue = currentCharacter.armor[type];
+
+          // melee ignores half of armor, rounded up
+          if (distance === 'melee') {
+            armorValue = Math.round(armorValue / 2);
+          }
+
+          // deal damage equal to damageValue - armor
+          const hpLoss = Math.max(damageValue - armorValue, 0);
+          currentCharacter.currentHealth = Math.max(
+            currentCharacter.currentHealth - hpLoss,
+            0
+          );
+
+          // reduce armor SP by 1
+          currentCharacter.armor[type] = Math.max(
+            currentCharacter.armor[type] - 1,
+            0
+          );
         }
       });
 
@@ -138,7 +173,7 @@ CharacterCardProps) => {
             onChange={handleChange}
           />
         </div>
-        <div className="flex divide-x divide-primary">
+        <div className="flex flex-wrap divide-x divide-primary">
           <div className="p-3">
             <Label>Initiative</Label>
             <input
@@ -187,6 +222,56 @@ CharacterCardProps) => {
               onChange={handleChange}
             />
           </div>
+          <div className="p-3">
+            <Label>Deal Ranged Damage</Label>
+            <div className="flex space-x-2 flex-wrap">
+              <input
+                type="number"
+                // name="armor.body"
+                placeholder="amount"
+                className="w-14"
+                value={damageValue}
+                onChange={(e) => setDamageValue(parseInt(e.target.value))}
+              />
+              <button
+                className="cyber-button py-0"
+                onClick={() => handleDamage('head', 'ranged')}
+              >
+                Head
+              </button>
+              <button
+                className="cyber-button py-0"
+                onClick={() => handleDamage('body', 'ranged')}
+              >
+                Body
+              </button>
+            </div>
+          </div>
+          <div className="p-3">
+            <Label>Deal Melee Damage</Label>
+            <div className="flex space-x-2 flex-wrap">
+              <input
+                type="number"
+                // name="armor.body"
+                placeholder="amount"
+                className="w-14"
+                value={damageValue}
+                onChange={(e) => setDamageValue(parseInt(e.target.value))}
+              />
+              <button
+                className="cyber-button py-0"
+                onClick={() => handleDamage('head', 'melee')}
+              >
+                Head
+              </button>
+              <button
+                className="cyber-button py-0"
+                onClick={() => handleDamage('body', 'melee')}
+              >
+                Body
+              </button>
+            </div>
+          </div>
         </div>
         <Disclosure>
           {({ open }) => (
@@ -233,7 +318,7 @@ const HomePage: BlitzPage = () => {
   const [roundTimestamp, setRoundTimestamp] = useState(Date.now());
 
   function addCharacter(
-    newCharacter = {
+    newCharacter: Character = {
       id: Date.now(),
       name: '',
       currentHealth: 0,
@@ -244,6 +329,19 @@ const HomePage: BlitzPage = () => {
         head: 0,
         body: 0,
       },
+      stats: {
+        int: 0,
+        ref: 0,
+        dex: 0,
+        tech: 0,
+        cool: 0,
+        will: 0,
+        luck: 0,
+        move: 0,
+        body: 0,
+        emp: 0,
+      },
+      weapons: [],
     }
   ) {
     setCharacters((prev) => [...prev, newCharacter]);
@@ -259,6 +357,11 @@ const HomePage: BlitzPage = () => {
 
   return (
     <Layout>
+      <div className="mb-4">
+        <button className="cyber-button" onClick={startNewRound}>
+          New Round
+        </button>
+      </div>
       <div className="space-y-4" key={roundTimestamp}>
         {sortedCharacters.map((character) => (
           <CharacterCard
@@ -273,9 +376,6 @@ const HomePage: BlitzPage = () => {
       <div className="mt-4 space-x-2 flex">
         <button className="cyber-button" onClick={() => addCharacter()}>
           Add Character
-        </button>
-        <button className="cyber-button" onClick={startNewRound}>
-          New Round
         </button>
         <GenerateNPC />
       </div>
