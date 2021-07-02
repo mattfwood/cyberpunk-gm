@@ -14,10 +14,7 @@ export const templates: { [key: string]: Partial<Character> } = {
       body: 6,
       emp: 3,
     },
-    weapons: [
-      { name: 'Poor Quality Shotgun', damage: '5d6' },
-      { name: 'Very Heavy Pistol', damage: '4d6' },
-    ],
+    weapons: { 'poor quality shotgun': '5d6', 'very heavy pistol': '4d6' },
     armor: {
       head: 7,
       body: 7,
