@@ -6,6 +6,19 @@ import { ChevronDownIcon, XIcon } from '@heroicons/react/outline';
 import useLocalStorage from 'app/core/hooks/useLocalStorage';
 import { Disclosure } from '@headlessui/react';
 import { GenerateNPC } from 'app/core/components/GenerateNPC';
+import {
+  categories,
+  characterSkills,
+  Skill,
+  skillList,
+} from 'app/core/components/skillList';
+
+// convert camelcase string to use spaces
+function toSentenceCase(text: string) {
+  const result = text.replace(/([A-Z])/g, ' $1');
+  // var finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  return result;
+}
 
 export type Stats = {
   int: number;
@@ -30,6 +43,8 @@ export type Armor = {
   body: number;
 };
 
+// export type Skill = { [key: typeof SKILL_LIST[number]]: number };
+
 export type Character = {
   id: number;
   name: string;
@@ -38,8 +53,9 @@ export type Character = {
   initiative: number;
   turnComplete: boolean;
   stats: Stats;
-  weapons: Weapon[] | null;
+  weapons: { [key: string]: string };
   armor: Armor;
+  skills: { [key in Skill]: number };
 };
 
 type CharacterCardProps = Character & {
@@ -60,9 +76,10 @@ const CharacterCard = ({
   setCharacters,
   characters,
   armor,
-}: // index,
-// turnComplete,
-CharacterCardProps) => {
+  stats,
+  weapons,
+  skills,
+}: CharacterCardProps) => {
   const [turnComplete, setTurnComplete] = useState(false);
   const [damageValue, setDamageValue] = useState(0);
 
@@ -81,9 +98,12 @@ CharacterCardProps) => {
           value = e.target.checked;
         }
 
-        if (fieldName.includes('armor')) {
-          const armorType = fieldName.split('.')[1];
-          currentCharacter.armor[armorType] = value;
+        if (fieldName.includes('.')) {
+          const [fieldKey, subKey] = fieldName.split('.');
+          currentCharacter[fieldKey][subKey] = value;
+        } else if (fieldName.includes('stats')) {
+          const stat = fieldName.split('.')[1];
+          currentCharacter.stats[stat] = value;
         } else {
           currentCharacter[e.target.name] = value;
         }
@@ -227,7 +247,6 @@ CharacterCardProps) => {
             <div className="flex space-x-2 flex-wrap">
               <input
                 type="number"
-                // name="armor.body"
                 placeholder="amount"
                 className="w-14"
                 value={damageValue}
@@ -284,7 +303,97 @@ CharacterCardProps) => {
                 />
               </Disclosure.Button>
               <Disclosure.Panel>
-                <div className="p-4">Content</div>
+                <div className="space-y-2 divide-primary divide-y">
+                  <div className="p-4 flex flex-wrap space-x-2">
+                    {Boolean(stats) &&
+                      Object.entries(stats).map(([key, value]) => (
+                        <label>
+                          <div>{key.toUpperCase()}</div>
+                          <input
+                            name={`stats.${key}`}
+                            onChange={handleChange}
+                            className="w-14 mt-1"
+                            type="number"
+                            min={0}
+                            value={value}
+                          />
+                        </label>
+                      ))}
+                  </div>
+                  <div className="flex space-x-2 divide-primary divide-x">
+                    <div className="p-4 capitalize space-y-2">
+                      <h4 className="font-bold uppercase">Weapons</h4>
+                      {Object.entries(weapons)?.map(([name, damage]) => (
+                        <label className="flex justify-between space-x-2">
+                          <div>{name}</div>
+                          <input
+                            type="text"
+                            className="w-16"
+                            name={`weapons.${name}`}
+                            value={damage}
+                            onChange={handleChange}
+                          />
+                        </label>
+                      ))}
+                    </div>
+                    <div className="p-4">
+                      <h4 className="font-bold uppercase">Ranged Hit Values</h4>
+                      <div>DV for weapon type + range</div>
+                      {stats?.ref >= 8 ? (
+                        <>
+                          <small className="block">OR</small>
+                          <div>{stats.dex + (skills?.evasion || 0)} + 1d10</div>
+                          <small>(DEX + Evasion Skill + 1d10)</small>
+                        </>
+                      ) : (
+                        <div className="text-gray-400">
+                          Can't dodge, REF lower than 8
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h4 className="font-bold uppercase">Melee Hit Values</h4>
+                      <div>{stats.dex + (skills?.evasion || 0)} + 1d10</div>
+                      <small className="text-xs">
+                        (DEX + Evasion Skill + 1d10)
+                      </small>
+                    </div>
+                  </div>
+                  <div className="p-4 pb-2">
+                    <h4 className="font-bold uppercase">Skills</h4>
+                  </div>
+                  <div className="flex space-x-2 divide-primary divide-x">
+                    {categories.map((categoryName) => (
+                      <div className="p-4">
+                        <h5 className="uppercase">
+                          {toSentenceCase(categoryName)}
+                        </h5>
+                        {Boolean(skills) &&
+                          Object.entries(skills).map(
+                            ([name, value]: [Skill, number]) => {
+                              const skillCategory = skillList[name].category;
+                              // group skills by category, only show one category at a time
+                              // @TODO: change this to be .reduce for efficiency
+                              if (skillCategory !== categoryName) return null;
+
+                              return (
+                                <label>
+                                  <div className="capitalize">
+                                    {toSentenceCase(name)}
+                                  </div>
+                                  <input
+                                    className="w-12"
+                                    type="number"
+                                    value={value}
+                                  />
+                                </label>
+                              );
+                            }
+                          )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </Disclosure.Panel>
             </>
           )}
@@ -308,6 +417,33 @@ CharacterCardProps) => {
 //   { ...samplePlayer, name: 'guy 3', initiative: 15 },
 // ];
 
+const defaultCharacter: Character = {
+  id: Date.now(),
+  name: '',
+  currentHealth: 0,
+  maxHealth: 0,
+  initiative: 0,
+  turnComplete: false,
+  armor: {
+    head: 0,
+    body: 0,
+  },
+  stats: {
+    int: 0,
+    ref: 0,
+    dex: 0,
+    tech: 0,
+    cool: 0,
+    will: 0,
+    luck: 0,
+    move: 0,
+    body: 0,
+    emp: 0,
+  },
+  weapons: { 'poor quality shotgun': '5d6', 'very heavy pistol': '4d6' },
+  skills: characterSkills!,
+};
+
 const HomePage: BlitzPage = () => {
   const [characters, setCharacters] = useLocalStorage<Character[]>(
     'combatTracking',
@@ -317,33 +453,7 @@ const HomePage: BlitzPage = () => {
   console.log(characters);
   const [roundTimestamp, setRoundTimestamp] = useState(Date.now());
 
-  function addCharacter(
-    newCharacter: Character = {
-      id: Date.now(),
-      name: '',
-      currentHealth: 0,
-      maxHealth: 0,
-      initiative: 0,
-      turnComplete: false,
-      armor: {
-        head: 0,
-        body: 0,
-      },
-      stats: {
-        int: 0,
-        ref: 0,
-        dex: 0,
-        tech: 0,
-        cool: 0,
-        will: 0,
-        luck: 0,
-        move: 0,
-        body: 0,
-        emp: 0,
-      },
-      weapons: [],
-    }
-  ) {
+  function addCharacter(newCharacter: Character = defaultCharacter) {
     setCharacters((prev) => [...prev, newCharacter]);
   }
 

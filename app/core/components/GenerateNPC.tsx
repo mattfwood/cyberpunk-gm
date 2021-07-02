@@ -7,7 +7,7 @@ export function GenerateNPC() {
 
   return (
     <>
-      <button className="cyber-button" onClick={() => setOpen(true)}>
+      <button disabled className="cyber-button" onClick={() => setOpen(true)}>
         Generate NPC
       </button>
       <Transition.Root show={open} as={Fragment}>

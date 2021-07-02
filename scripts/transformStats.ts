@@ -32,19 +32,6 @@ import { readFileSync, writeFileSync } from 'fs';
 
 const fileText = readFileSync('./scripts/input.txt', 'utf-8');
 
-const STAT_LIST = [
-  'int',
-  'ref',
-  'dex',
-  'tech',
-  'cool',
-  'will',
-  'luck',
-  'move',
-  'body',
-  'emp',
-];
-
 const output = {
   int: [],
   ref: [],
