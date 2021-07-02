@@ -59,6 +59,7 @@ const CharacterCard = ({
   initiative,
   setCharacters,
   characters,
+  armor,
 }: // index,
 // turnComplete,
 CharacterCardProps) => {
@@ -68,6 +69,7 @@ CharacterCardProps) => {
       const result = produce(prev, (draft) => {
         const index = draft.findIndex((character) => character.id === id);
         let value: string | number | boolean = e.target.value;
+        const fieldName = e.target.name;
 
         if (e.target.type === 'number') {
           value = parseInt(e.target.value);
@@ -75,8 +77,14 @@ CharacterCardProps) => {
           value = e.target.checked;
         }
 
-        // @ts-ignore
-        draft[index][e.target.name] = value;
+        if (fieldName.includes('armor')) {
+          const armorType = fieldName.split('.')[1];
+          // @ts-ignore
+          draft[index].armor[armorType] = value;
+        } else {
+          // @ts-ignore
+          draft[index][e.target.name] = value;
+        }
       });
 
       return result;
@@ -159,6 +167,26 @@ CharacterCardProps) => {
               onChange={handleChange}
             />
           </div>
+          <div className="p-3">
+            <Label>Head Armor</Label>
+            <input
+              type="number"
+              name="armor.head"
+              className="w-14"
+              value={armor?.head}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="p-3">
+            <Label>Body Armor</Label>
+            <input
+              type="number"
+              name="armor.body"
+              className="w-14"
+              value={armor?.body}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         <Disclosure>
           {({ open }) => (
@@ -200,6 +228,8 @@ const HomePage: BlitzPage = () => {
     'combatTracking',
     []
   );
+
+  console.log(characters);
   const [roundTimestamp, setRoundTimestamp] = useState(Date.now());
 
   function addCharacter(
@@ -210,6 +240,10 @@ const HomePage: BlitzPage = () => {
       maxHealth: 0,
       initiative: 0,
       turnComplete: false,
+      armor: {
+        head: 0,
+        body: 0,
+      },
     }
   ) {
     setCharacters((prev) => [...prev, newCharacter]);
