@@ -1,5 +1,3 @@
-// import { Skill } from 'app/pages';
-import { Character } from '../atoms/roleAtom';
 import { STAT_LIST } from './roleStats';
 
 export const categories = [
@@ -377,7 +375,5 @@ const SKILL_TUPLES = SKILL_LIST.map((skillName) => [skillName, 0]);
 
 const characterSkills: { [key in Skill]: number } =
   Object.fromEntries(SKILL_TUPLES);
-
-console.log(SKILL_LIST);
 
 export { characterSkills };

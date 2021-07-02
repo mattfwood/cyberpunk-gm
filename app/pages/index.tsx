@@ -450,7 +450,6 @@ const HomePage: BlitzPage = () => {
     []
   );
 
-  console.log(characters);
   const [roundTimestamp, setRoundTimestamp] = useState(Date.now());
 
   function addCharacter(newCharacter: Character = defaultCharacter) {
