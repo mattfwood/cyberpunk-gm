@@ -1,15 +1,8 @@
-import React, { ReactNode, useState, Fragment } from 'react';
+import React, { ReactNode, Fragment } from 'react';
 import { Head, useRouter } from 'blitz';
 /* This example requires Tailwind CSS v2.0+ */
-import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
-import {
-  AdjustmentsIcon,
-  BellIcon,
-  ChartBarIcon,
-  HomeIcon,
-  MenuIcon,
-  XIcon,
-} from '@heroicons/react/outline';
+import { Disclosure } from '@headlessui/react';
+import { AdjustmentsIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 
 const baseNavigation = [
   { name: 'Combat Tracker', href: '/', icon: AdjustmentsIcon },
@@ -23,10 +16,6 @@ const baseNavigation = [
   //   icon: ChartBarIcon,
   // },
 ];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 const Navigation = () => {
   const router = useRouter();
@@ -48,7 +37,7 @@ const Navigation = () => {
                 </div>
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
-                    {navigation.map((item, itemIdx) =>
+                    {navigation.map((item) =>
                       item.current ? (
                         <Fragment key={item.name}>
                           {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
@@ -88,7 +77,7 @@ const Navigation = () => {
 
           <Disclosure.Panel className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {navigation.map((item, itemIdx) =>
+              {navigation.map((item) =>
                 item.current ? (
                   <Fragment key={item.name}>
                     {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
@@ -118,7 +107,6 @@ const Navigation = () => {
 };
 
 const Layout = ({ title, children }: LayoutProps) => {
-  const router = useRouter();
   // const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // const navigation = baseNavigation.map((link) => ({

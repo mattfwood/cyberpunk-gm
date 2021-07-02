@@ -1,6 +1,5 @@
 import React from 'react';
 import { useCharacterState } from '../atoms/roleAtom';
-import { roles } from './roles';
 
 export function SkillBuilder() {
   const [character, setCharacter] = useCharacterState();
