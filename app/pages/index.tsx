@@ -193,7 +193,7 @@ const CharacterCard = ({
             onChange={handleChange}
           />
         </div>
-        <div className="flex flex-wrap divide-x divide-primary">
+        <div className="grid grid-flow-row grid-cols-fit-40 gap-px divide-primary grid-container">
           <div className="p-3">
             <Label>Initiative</Label>
             <input
@@ -222,7 +222,7 @@ const CharacterCard = ({
               onChange={handleChange}
             />
           </div>
-          <div className="p-3">
+          <div className="p-3 border-b border-primary">
             <Label>Head Armor</Label>
             <input
               type="number"

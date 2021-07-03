@@ -21,6 +21,9 @@ module.exports = {
         background: '#161616',
         sidebar: 'rgb(43, 48, 54)',
       },
+      gridTemplateColumns: {
+        'fit-40': 'repeat(auto-fit, minmax(50px, 1fr))',
+      },
     },
   },
   variants: {

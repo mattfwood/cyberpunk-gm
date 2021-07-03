@@ -36,6 +36,10 @@
     @apply bg-primary hover:bg-primary-focus capitalize py-1 px-4 text-black;
   }
 
+  .grid-container > div {
+    @apply border-b border-r border-primary;
+  }
+
   /* input:focus {
     @apply border-primary-focus bg-primary-highlight
   } */
