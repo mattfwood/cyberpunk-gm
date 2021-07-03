@@ -8,6 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        // sans: ['Inter', ...defaultTheme.fontFamily.sans],
         sans: ['Blender Pro', ...defaultTheme.fontFamily.sans],
       },
       colors: {

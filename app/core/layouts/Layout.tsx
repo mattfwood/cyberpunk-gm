@@ -1,20 +1,11 @@
 import React, { ReactNode, Fragment } from 'react';
 import { Head, useRouter } from 'blitz';
-/* This example requires Tailwind CSS v2.0+ */
 import { Disclosure } from '@headlessui/react';
-import { AdjustmentsIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
+import { MenuIcon, XIcon } from '@heroicons/react/outline';
 
 const baseNavigation = [
-  { name: 'Combat Tracker', href: '/', icon: AdjustmentsIcon },
-  // { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  // { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  // { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  // { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  // {
-  //   name: 'Character Creation',
-  //   href: '/character-creation',
-  //   icon: ChartBarIcon,
-  // },
+  { name: 'Combat Tracker', href: '/' },
+  { name: 'Feedback', href: '/feedback' },
 ];
 
 const Navigation = () => {
