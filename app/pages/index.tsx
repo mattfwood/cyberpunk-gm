@@ -193,7 +193,7 @@ const CharacterCard = ({
             onChange={handleChange}
           />
         </div>
-        <div className="grid grid-flow-row grid-cols-fit-40 gap-px divide-primary grid-container">
+        <div className="grid grid-flow-row grid-cols-fit-150 gap-px divide-primary grid-container">
           <div className="p-3">
             <Label>Initiative</Label>
             <input
@@ -244,7 +244,7 @@ const CharacterCard = ({
           </div>
           <div className="p-3">
             <Label>Deal Ranged Damage</Label>
-            <div className="flex space-x-2 flex-wrap">
+            <div className="flex flex-col flex-wrap space-y-1 md:space-y-0 items-start  md:flex-row md:flex-nowrap md:items-center">
               <input
                 type="number"
                 placeholder="amount"
@@ -268,7 +268,7 @@ const CharacterCard = ({
           </div>
           <div className="p-3">
             <Label>Deal Melee Damage</Label>
-            <div className="flex space-x-2 flex-wrap">
+            <div className="flex flex-col flex-wrap space-y-1 md:space-y-0 items-start  md:flex-row md:flex-nowrap md:items-center">
               <input
                 type="number"
                 // name="armor.body"
@@ -362,7 +362,7 @@ const CharacterCard = ({
                   <div className="p-4 pb-2">
                     <h4 className="font-bold uppercase">Skills</h4>
                   </div>
-                  <div className="flex space-x-2 divide-primary divide-x">
+                  <div className="grid grid-flow-row grid-cols-fit-50 gap-px divide-primary grid-container">
                     {categories.map((categoryName) => (
                       <div className="p-4">
                         <h5 className="uppercase">
@@ -378,13 +378,13 @@ const CharacterCard = ({
 
                               return (
                                 <label>
-                                  <div className="capitalize">
+                                  <div className="capitalize leading-none">
                                     {toSentenceCase(name)}
                                   </div>
                                   <input
                                     className="w-12"
                                     type="number"
-                                    value={value}
+                                    defaultValue={value}
                                   />
                                 </label>
                               );
@@ -453,7 +453,7 @@ const HomePage: BlitzPage = () => {
   const [roundTimestamp, setRoundTimestamp] = useState(Date.now());
 
   function addCharacter(newCharacter: Character = defaultCharacter) {
-    setCharacters((prev) => [...prev, newCharacter]);
+    setCharacters((prev) => [...prev, { ...newCharacter, id: Date.now() }]);
   }
 
   const sortedCharacters = [...characters].sort(

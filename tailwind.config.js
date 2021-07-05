@@ -22,7 +22,8 @@ module.exports = {
         sidebar: 'rgb(43, 48, 54)',
       },
       gridTemplateColumns: {
-        'fit-40': 'repeat(auto-fit, minmax(50px, 1fr))',
+        'fit-150': 'repeat(auto-fit, minmax(150px, 1fr))',
+        'fit-50': 'repeat(auto-fit, minmax(120px, 1fr))',
       },
     },
   },
