@@ -5,6 +5,7 @@
     "dev": "blitz dev",
     "build": "blitz build",
     "start": "blitz start",
+    "start:production": "blitz start --port $PORT",
     "studio": "blitz prisma studio",
     "transform-stats": "node --loader ts-node/esm scripts/transformStats.ts",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
