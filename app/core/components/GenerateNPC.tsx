@@ -1,13 +1,37 @@
 import { Transition, Dialog } from '@headlessui/react';
+import { Character } from 'app/pages';
 import React, { useState, Fragment } from 'react';
 import { templates } from './npcTemplates';
 
-export function GenerateNPC() {
+export function GenerateNPC({
+  addCharacter,
+}: {
+  addCharacter: (character: Character) => void;
+}) {
   const [open, setOpen] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const { template } = e.target.elements;
+    const templateName: string = template?.value;
+    const characterTemplate = templates[templateName];
+
+    if (characterTemplate) {
+      addCharacter({
+        id: Date.now(),
+        name: templateName,
+        turnComplete: false,
+        initiative: 0,
+        ...characterTemplate,
+      });
+      setOpen(false);
+    }
+  }
 
   return (
     <>
-      <button disabled className="cyber-button" onClick={() => setOpen(true)}>
+      <button className="cyber-button" onClick={() => setOpen(true)}>
         Generate NPC
       </button>
       <Transition.Root show={open} as={Fragment}>
@@ -18,7 +42,10 @@ export function GenerateNPC() {
           open={open}
           onClose={setOpen}
         >
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <form
+            onSubmit={handleSubmit}
+            className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+          >
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -55,7 +82,11 @@ export function GenerateNPC() {
                   >
                     Generate NPC
                   </Dialog.Title>
-                  <select name="template" className="text-black capitalize">
+                  <select
+                    required
+                    name="template"
+                    className="text-black capitalize"
+                  >
                     {Object.entries(templates).map(([name, value]) => (
                       <option className="capitalize" key={name} value={name}>
                         {name}
@@ -64,13 +95,13 @@ export function GenerateNPC() {
                   </select>
                 </div>
                 <div className="mt-5 sm:mt-6">
-                  <button type="button" className="cyber-button w-full">
+                  <button type="submit" className="cyber-button w-full">
                     Add NPC
                   </button>
                 </div>
               </div>
             </Transition.Child>
-          </div>
+          </form>
         </Dialog>
       </Transition.Root>
     </>

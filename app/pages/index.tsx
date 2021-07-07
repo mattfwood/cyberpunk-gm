@@ -486,7 +486,7 @@ const HomePage: BlitzPage = () => {
         <button className="cyber-button" onClick={() => addCharacter()}>
           Add Character
         </button>
-        <GenerateNPC />
+        <GenerateNPC addCharacter={addCharacter} />
       </div>
     </Layout>
   );
