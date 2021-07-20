@@ -56,6 +56,7 @@ export type Character = {
   weapons: { [key: string]: string };
   armor: Armor;
   skills: { [key in Skill]: number };
+  notes: string;
 };
 
 type CharacterCardProps = Character & {
@@ -79,6 +80,7 @@ const CharacterCard = ({
   stats,
   weapons,
   skills,
+  notes,
 }: CharacterCardProps) => {
   const [turnComplete, setTurnComplete] = useState(false);
   const [damageValue, setDamageValue] = useState(0);
@@ -303,6 +305,15 @@ const CharacterCard = ({
                 />
               </Disclosure.Button>
               <Disclosure.Panel>
+                <div className="p-4 border-primary border-b">
+                  <Label>Notes</Label>
+                  <textarea
+                    className="text-black w-full"
+                    value={notes}
+                    name="notes"
+                    onChange={handleChange}
+                  />
+                </div>
                 <div className="space-y-2 divide-primary divide-y">
                   <div className="p-4 flex flex-wrap space-x-2">
                     {Boolean(stats) &&
@@ -442,6 +453,7 @@ const defaultCharacter: Character = {
   },
   weapons: { 'poor quality shotgun': '5d6', 'very heavy pistol': '4d6' },
   skills: characterSkills!,
+  notes: '',
 };
 
 const HomePage: BlitzPage = () => {
