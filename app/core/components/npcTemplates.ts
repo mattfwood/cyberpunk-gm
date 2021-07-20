@@ -8,6 +8,7 @@ export const templates: Record<
   Omit<Character, 'id' | 'name' | 'turnComplete' | 'initiative'>
 > = {
   bodyguard: {
+    notes: '',
     stats: {
       int: 3,
       ref: 6,
