@@ -68,7 +68,7 @@ const Label = ({ children }) => (
   <div className="text-[#c7c7c7] text-sm uppercase">{children}</div>
 );
 
-const CharacterCard = ({
+export const CharacterCard = ({
   id,
   name,
   currentHealth,

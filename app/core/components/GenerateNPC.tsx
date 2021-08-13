@@ -1,7 +1,11 @@
 import { Transition, Dialog } from '@headlessui/react';
-import { Character } from 'app/pages';
+import { Character, CharacterCard } from 'app/pages';
 import React, { useState, Fragment } from 'react';
 import { templates } from './npcTemplates';
+
+// doesn't create a truly unique ID, but is close enough for our purposes
+const generateUniqueEnoughId = () =>
+  Math.floor(Math.random() * Number.MAX_SAFE_INTEGER - 1);
 
 export function GenerateNPC({
   addCharacter,
@@ -9,21 +13,33 @@ export function GenerateNPC({
   addCharacter: (character: Character) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [characters, setCharacters] = useState<Character[]>(
+    Object.entries(templates).map(([name, template]) => ({
+      id: generateUniqueEnoughId(),
+      name,
+      initiative: 0,
+      turnComplete: false,
+      ...template,
+    }))
+  );
+  const [selectedTemplate, setSelectedTemplate] = useState(
+    Object.keys(templates)[0]!
+  );
+
+  const currentCharacter = characters.find(
+    (character) => character.name === selectedTemplate
+  );
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const characterTemplate = templates[selectedTemplate];
 
-    const { template } = e.target.elements;
-    const templateName: string = template?.value;
-    const characterTemplate = templates[templateName];
-
-    if (characterTemplate) {
+    if (characterTemplate && currentCharacter) {
       addCharacter({
+        ...currentCharacter,
         id: Date.now(),
-        name: templateName,
         turnComplete: false,
         initiative: 0,
-        ...characterTemplate,
       });
       setOpen(false);
     }
@@ -38,7 +54,7 @@ export function GenerateNPC({
         <Dialog
           as="div"
           static
-          className="fixed z-10 inset-0 overflow-y-auto"
+          className="fixed z-10 inset-4 overflow-y-auto"
           open={open}
           onClose={setOpen}
         >
@@ -74,7 +90,7 @@ export function GenerateNPC({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <div className="inline-block align-bottom bg-background text-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+              <div className="inline-block bg-background text-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:w-full sm:p-6">
                 <div className="text-center">
                   <Dialog.Title
                     as="h3"
@@ -85,7 +101,8 @@ export function GenerateNPC({
                   <select
                     required
                     name="template"
-                    className="text-black capitalize"
+                    className="text-black capitalize mb-4"
+                    onChange={(e) => setSelectedTemplate(e.target.value)}
                   >
                     {Object.entries(templates).map(([name, value]) => (
                       <option className="capitalize" key={name} value={name}>
@@ -94,6 +111,13 @@ export function GenerateNPC({
                     ))}
                   </select>
                 </div>
+                <CharacterCard
+                  // setCharacters={() => { }}
+                  setCharacters={setCharacters}
+                  characters={characters}
+                  {...(currentCharacter ? currentCharacter : {})}
+                  // {...templates[selectedTemplate]}
+                />
                 <div className="mt-5 sm:mt-6">
                   <button type="submit" className="cyber-button w-full">
                     Add NPC
