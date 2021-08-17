@@ -14,6 +14,7 @@ export function GenerateNPC({
 }) {
   const [open, setOpen] = useState(false);
   const [characters, setCharacters] = useState<Character[]>(
+    // @ts-ignore
     Object.entries(templates).map(([name, template]) => ({
       id: generateUniqueEnoughId(),
       name,
