@@ -14,7 +14,7 @@ import {
 } from 'app/core/components/skillList';
 
 // convert camelcase string to use spaces
-function toSentenceCase(text: string) {
+export function toSentenceCase(text: string) {
   const result = text.replace(/([A-Z])/g, ' $1');
   // var finalResult = result.charAt(0).toUpperCase() + result.slice(1);
   return result;

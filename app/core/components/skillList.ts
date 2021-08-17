@@ -15,6 +15,7 @@ export const categories = [
 type SkillDetail = {
   linkedStat: typeof STAT_LIST[number];
   category: typeof categories[number];
+  description?: string;
 };
 
 export const skillList: { [key in Skill]: SkillDetail } = {
@@ -37,6 +38,7 @@ export const skillList: { [key in Skill]: SkillDetail } = {
   concentration: {
     linkedStat: 'will',
     category: 'awareness',
+    description: `Skill of focus and mental control, encompassing feats of memory, recall, ignoring distractions, and physiological mastery.`,
   },
   conversation: {
     linkedStat: 'emp',

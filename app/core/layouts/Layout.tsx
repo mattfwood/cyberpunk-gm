@@ -6,6 +6,7 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline';
 const baseNavigation = [
   { name: 'Combat Tracker', href: '/' },
   { name: 'Feedback', href: '/feedback' },
+  { name: 'Skill List', href: '/skills' },
 ];
 
 const Navigation = () => {
