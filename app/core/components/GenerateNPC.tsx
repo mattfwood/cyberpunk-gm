@@ -111,13 +111,14 @@ export function GenerateNPC({
                     ))}
                   </select>
                 </div>
-                <CharacterCard
-                  // setCharacters={() => { }}
-                  setCharacters={setCharacters}
-                  characters={characters}
-                  {...(currentCharacter ? currentCharacter : {})}
-                  // {...templates[selectedTemplate]}
-                />
+                {Boolean(currentCharacter) && (
+                  // @ts-ignore
+                  <CharacterCard
+                    setCharacters={setCharacters}
+                    characters={characters}
+                    {...(currentCharacter ? currentCharacter : {})}
+                  />
+                )}
                 <div className="mt-5 sm:mt-6">
                   <button type="submit" className="cyber-button w-full">
                     Add NPC
